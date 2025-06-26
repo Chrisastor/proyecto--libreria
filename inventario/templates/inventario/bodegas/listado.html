@@ -1,0 +1,55 @@
+<!-- inventario/templates/inventario/bodegas/listado.html -->
+{% extends "base.html" %}
+
+{% block title %}Listado de Bodegas{% endblock %}
+
+{% block content %}
+<div>
+    <div>
+        <h2>Bodegas</h2>
+        <a href="{% url 'crear_bodega' %}">
+            Nueva Bodega
+        </a>
+    </div>
+
+    {% if bodegas %}
+    <div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Dirección</th>
+                    <th>Total Productos</th> {# Este campo viene de la anotación en la vista #}
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for bodega in bodegas %}
+                <tr>
+                    <td>{{ bodega.nombre }}</td>
+                    <td>{{ bodega.direccion }}</td>
+                    <td>{{ bodega.total_productos|default:0 }}</td> {# Muestra 0 si no hay productos #}
+                    <td>
+                        <a href="{% url 'editar_bodega' bodega.pk %}">
+                            Editar
+                        </a>
+                        {# El botón de eliminar se deshabilitará si hay productos. La vista debe añadir esta lógica #}
+                        <form action="{% url 'eliminar_bodega' bodega.pk %}" method="post" onsubmit="return confirm('¿Estás seguro de que quieres eliminar esta bodega? Esto no se podrá deshacer si tiene productos.');">
+                            {% csrf_token %}
+                            <button type="submit" {% if bodega.total_productos > 0 %}disabled{% endif %}>
+                                Eliminar
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div>
+        No hay bodegas registradas. <a href="{% url 'crear_bodega' %}">Crea una ahora</a>.
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,6 @@
+<option value="">---------</option> {# Opción por defecto #}
+{% for producto in productos %}
+    <option value="{{ producto.pk }}">{{ producto.titulo }}</option>
+{% empty %}
+    <option value="">No hay productos disponibles en esta bodega.</option>
+{% endfor %}

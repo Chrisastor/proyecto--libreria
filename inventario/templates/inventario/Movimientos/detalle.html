@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block title %}Detalle de Movimiento #{{ movimiento.id }}{% endblock %}
+
+{% block content %}
+<div>
+    <div>
+        <h2>Detalle del Movimiento #{{ movimiento.id }}</h2>
+        <p><strong>Fecha:</strong> {{ movimiento.fecha }}</p>
+        <p><strong>Usuario:</strong> {{ movimiento.usuario.username }}</p>
+        <p><strong>Bodega Origen:</strong> {{ movimiento.bodega_origen.nombre }}</p>
+        <p><strong>Bodega Destino:</strong> {{ movimiento.bodega_destino.nombre }}</p>
+
+        <h3>Productos Movidos:</h3>
+        {% if detalles %}
+            <table>
+                <thead>
+                    <tr>
+                        <th>Producto</th>
+                        <th>Cantidad</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for detalle in detalles %}
+                    <tr>
+                        <td>{{ detalle.producto.titulo }}</td>
+                        <td>{{ detalle.cantidad }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>No hay productos detallados para este movimiento.</p>
+        {% endif %}
+
+        <div>
+            <a href="{% url 'generar_pdf_movimiento' movimiento.pk %}">Generar PDF</a>
+            <a href="{% url 'listado_movimientos' %}">Volver al Listado de Movimientos</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard Administrador de Sistema{% endblock %}
+
+{% block content %}
+<header class="bg-white shadow-md p-4 mb-6">
+    <div class="container mx-auto flex justify-between items-center">
+        <h1 class="text-2xl font-bold text-gray-800">Panel de Control Administrador de Sistema</h1>
+        <nav class="flex items-center space-x-4">
+            <span class="text-gray-600">Bienvenido, {{ user.get_full_name|default:user.username }}</span>
+            <a href="{% url 'logout' %}" class="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition duration-300">Cerrar Sesión</a>
+        </nav>
+    </div>
+</header>
+
+<main class="flex-grow container mx-auto p-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+    <!-- Sección de Gestión de Inventario -->
+    <section class="bg-white p-6 rounded-lg shadow-md border-t-4 border-indigo-500">
+        <h2 class="text-xl font-semibold mb-4 text-gray-700">Gestión de Inventario</h2>
+        <ul class="space-y-3">
+            <li>
+                <a href="{% url 'listado_productos' %}" class="flex items-center space-x-3 p-3 bg-indigo-50 hover:bg-indigo-100 rounded-md transition duration-200">
+                    <span class="text-indigo-600">&#9679;</span>
+                    <span class="font-medium text-gray-700">Productos</span>
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'listado_bodegas' %}" class="flex items-center space-x-3 p-3 bg-indigo-50 hover:bg-indigo-100 rounded-md transition duration-200">
+                    <span class="text-indigo-600">&#9679;</span>
+                    <span class="font-medium text-gray-700">Bodegas</span>
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'listado_editoriales' %}" class="flex items-center space-x-3 p-3 bg-indigo-50 hover:bg-indigo-100 rounded-md transition duration-200">
+                    <span class="text-indigo-600">&#9679;</span>
+                    <span class="font-medium text-gray-700">Editoriales</span>
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'listado_autores' %}" class="flex items-center space-x-3 p-3 bg-indigo-50 hover:bg-indigo-100 rounded-md transition duration-200">
+                    <span class="text-indigo-600">&#9679;</span>
+                    <span class="font-medium text-gray-700">Autores</span>
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'listado_stock' %}" class="flex items-center space-x-3 p-3 bg-indigo-50 hover:bg-indigo-100 rounded-md transition duration-200">
+                    <span class="text-indigo-600">&#9679;</span>
+                    <span class="font-medium text-gray-700">Stock Manual</span>
+                </a>
+            </li>
+        </ul>
+    </section>
+
+    <!-- Sección de Movimientos de Stock -->
+    <section class="bg-white p-6 rounded-lg shadow-md border-t-4 border-green-500">
+        <h2 class="text-xl font-semibold mb-4 text-gray-700">Movimientos de Stock</h2>
+        <ul class="space-y-3">
+            <li>
+                <a href="{% url 'crear_movimiento' %}" class="flex items-center space-x-3 p-3 bg-green-50 hover:bg-green-100 rounded-md transition duration-200">
+                    <span class="text-green-600">&#9679;</span>
+                    <span class="font-medium text-gray-700">Nuevo Movimiento</span>
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'listado_movimientos' %}" class="flex items-center space-x-3 p-3 bg-green-50 hover:bg-green-100 rounded-md transition duration-200">
+                    <span class="text-green-600">&#9679;</span>
+                    <span class="font-medium text-gray-700">Historial de Movimientos</span>
+                </a>
+            </li>
+        </ul>
+    </section>
+
+    <!-- Sección de Informes -->
+    <section class="bg-white p-6 rounded-lg shadow-md border-t-4 border-blue-500">
+        <h2 class="text-xl font-semibold mb-4 text-gray-700">Informes</h2>
+        <ul class="space-y-3">
+            <li>
+                <a href="{% url 'informe_stock' %}" class="flex items-center space-x-3 p-3 bg-blue-50 hover:bg-blue-100 rounded-md transition duration-200">
+                    <span class="text-blue-600">&#9679;</span>
+                    <span class="font-medium text-gray-700">Stock General</span>
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'informe_movimientos' %}" class="flex items-center space-x-3 p-3 bg-blue-50 hover:bg-blue-100 rounded-md transition duration-200">
+                    <span class="text-blue-600">&#9679;</span>
+                    <span class="font-medium text-gray-700">Todos los Movimientos</span>
+                </a>
+            </li>
+        </ul>
+    </section>
+
+    <!-- ¡SECCIÓN DE GESTIÓN DE USUARIOS! -->
+    <section class="bg-white p-6 rounded-lg shadow-md border-t-4 border-red-500">
+        <h2 class="text-xl font-semibold mb-4 text-gray-700">Gestión de Usuarios</h2>
+        <ul class="space-y-3">
+            <li>
+                <a href="{% url 'listado_usuarios' %}" class="flex items-center space-x-3 p-3 bg-red-50 hover:bg-red-100 rounded-md transition duration-200">
+                    <span class="text-red-600">&#9679;</span>
+                    <span class="font-medium text-gray-700">Listar Usuarios</span>
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'crear_usuario' %}" class="flex items-center space-x-3 p-3 bg-red-50 hover:bg-red-100 rounded-md transition duration-200">
+                    <span class="text-red-600">&#9679;</span>
+                    <span class="font-medium text-gray-700">Crear Nuevo Usuario</span>
+                </a>
+            </li>
+        </ul>
+    </section>
+
+</main>
+{% endblock %}

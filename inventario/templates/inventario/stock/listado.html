@@ -1,0 +1,99 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <h1 class="text-3xl font-bold mb-6 text-gray-800">Gestión de Stock</h1>
+
+    {# Formulario para agregar/ajustar stock #}
+    <div class="bg-white shadow-md rounded-lg p-6 mb-8">
+        <h2 class="text-2xl font-semibold mb-4 text-gray-700">Ajustar Stock Manualmente (Sumar Cantidad)</h2>
+        <form method="post" action="{% url 'listado_stock' %}" class="space-y-4">
+            {% csrf_token %}
+            
+            {% if form.errors %}
+                <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+                    <strong class="font-bold">¡Error!</strong>
+                    <span class="block sm:inline">Por favor, corrige los siguientes errores:</span>
+                    <ul class="list-disc ml-5 mt-2">
+                        {% for field in form %}
+                            {% if field.errors %}
+                                {% for error in field.errors %}
+                                    <li>{{ field.label }}: {{ error }}</li>
+                                {% endfor %}
+                            {% endif %}
+                        {% endfor %}
+                        {% for error in form.non_field_errors %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endif %}
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div>
+                    <label for="{{ form.bodega.id_for_label }}" class="block text-sm font-medium text-gray-700">{{ form.bodega.label }}</label>
+                    {{ form.bodega }}
+                </div>
+                <div>
+                    <label for="{{ form.producto.id_for_label }}" class="block text-sm font-medium text-gray-700">{{ form.producto.label }}</label>
+                    {{ form.producto }}
+                </div>
+                <div>
+                    <label for="{{ form.cantidad.id_for_label }}" class="block text-sm font-medium text-gray-700">{{ form.cantidad.label }}</label>
+                    {{ form.cantidad }}
+                </div>
+            </div>
+            <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md shadow-md transition duration-300">
+                Añadir al Stock Existente
+            </button>
+        </form>
+    </div>
+
+    {# Listado de stock actual #}
+    <div class="bg-white shadow-md rounded-lg p-6">
+        <h2 class="text-2xl font-semibold mb-4 text-gray-700">Stock Actual</h2>
+        {% if stocks %}
+        <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Bodega
+                        </th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Producto
+                        </th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Cantidad
+                        </th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                    {% for stock in stocks %}
+                    <tr>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                            {{ stock.bodega.nombre }}
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                            {{ stock.producto.titulo }}
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                            {{ stock.cantidad }}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <p class="text-gray-600">No hay stock registrado en ninguna bodega.</p>
+        {% endif %}
+    </div>
+
+    <div class="mt-8 text-center">
+        <a href="{% url 'home' %}" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+            Volver al Inicio
+        </a>
+    </div>
+</div>
+{% endblock %}

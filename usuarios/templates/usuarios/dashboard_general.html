@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard Usuario{% endblock %}
+
+{% block content %}
+<header class="bg-white shadow-md p-4 mb-6">
+    <div class="container mx-auto flex justify-between items-center">
+        <h1 class="text-2xl font-bold text-gray-800">Panel de Control General de Usuario</h1>
+        <nav class="flex items-center space-x-4">
+            <span class="text-gray-600">Bienvenido, {{ user.get_full_name|default:user.username }}</span>
+            <a href="{% url 'logout' %}" class="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition duration-300">Cerrar Sesión</a>
+        </nav>
+    </div>
+</header>
+
+<main class="flex-grow container mx-auto p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+
+    <!-- Sección de Consulta de Información -->
+    <section class="bg-white p-6 rounded-lg shadow-md border-t-4 border-purple-500">
+        <h2 class="text-xl font-semibold mb-4 text-gray-700">Consulta de Información</h2>
+        <ul class="space-y-3">
+            <li>
+                <a href="{% url 'listado_productos' %}" class="flex items-center space-x-3 p-3 bg-purple-50 hover:bg-purple-100 rounded-md transition duration-200">
+                    <span class="text-purple-600">&#9679;</span>
+                    <span class="font-medium text-gray-700">Ver Listado de Productos</span>
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'listado_stock' %}" class="flex items-center space-x-3 p-3 bg-purple-50 hover:bg-purple-100 rounded-md transition duration-200">
+                    <span class="text-purple-600">&#9679;</span>
+                    <span class="font-medium text-gray-700">Ver Stock Actual</span>
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'listado_bodegas' %}" class="flex items-center space-x-3 p-3 bg-purple-50 hover:bg-purple-100 rounded-md transition duration-200">
+                    <span class="text-purple-600">&#9679;</span>
+                    <span class="font-medium text-gray-700">Ver Bodegas Registradas</span>
+                </a>
+            </li>
+        </ul>
+    </section>
+
+    <!-- Puedes añadir más secciones para informes generales o cualquier otra funcionalidad de consulta -->
+    <!-- Por ejemplo, un enlace a un informe de movimientos de solo lectura, si aplica a este rol. -->
+    <section class="bg-white p-6 rounded-lg shadow-md border-t-4 border-yellow-500">
+        <h2 class="text-xl font-semibold mb-4 text-gray-700">Informes y Datos</h2>
+        <ul class="space-y-3">
+            <li>
+                <a href="{% url 'informe_stock' %}" class="flex items-center space-x-3 p-3 bg-yellow-50 hover:bg-yellow-100 rounded-md transition duration-200">
+                    <span class="text-yellow-600">&#9679;</span>
+                    <span class="font-medium text-gray-700">Informe de Stock General</span>
+                </a>
+            </li>
+            <!-- Agrega más enlaces a informes relevantes para el rol de usuario si es necesario -->
+        </ul>
+    </section>
+
+</main>
+{% endblock %}

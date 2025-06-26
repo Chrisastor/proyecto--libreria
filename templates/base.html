@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Bodega{% endblock %}</title>
+    <!-- Incluye HTMX para la funcionalidad de carga dinámica de productos -->
+    <script src="https://unpkg.com/htmx.org@1.9.10" xintegrity="sha384-D1Kt99CQMDuFHc/ULmR9G/GtT7GEzGuxUwdh2f5uJECwHT/HODiTRC/YLlXlM9fS" crossorigin="anonymous"></script>
+</head>
+<body>
+    <header>
+        <h2>Sistema de Taller inventario</h2>
+        {% if user.is_authenticated %}
+        <p>Bienvenido, {{ user.username }}
+            <form action="{% url 'logout' %}" method="post" class="inline">
+    {% csrf_token %}
+    <button type="submit" class="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition duration-300">
+        Cerrar Sesión
+    </button>
+</form>
+
+    {% endif %}
+
+        <hr>
+    </header>
+
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+</body>
+</html>

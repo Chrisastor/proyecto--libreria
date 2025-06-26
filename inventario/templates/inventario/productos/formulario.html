@@ -1,0 +1,24 @@
+<!-- inventario/templates/inventario/productos/formulario.html -->
+{% extends "base.html" %}
+
+{% block title %}
+    {% if form.instance.pk %}Editar Producto{% else %}Crear Producto{% endif %}
+{% endblock %}
+
+{% block content %}
+<div>
+    <div>
+        <h2>
+            {% if form.instance.pk %}Editar Producto{% else %}Crear Nuevo Producto{% endif %}
+        </h2>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <div>
+                <button type="submit">Guardar Producto</button>
+                <a href="{% url 'listado_productos' %}">Cancelar</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

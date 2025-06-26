@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% block title %}Listado de Productos{% endblock %}
+
+{% block content %}
+<div>
+    <div>
+        <h2>Productos</h2>
+        <a href="{% url 'crear_producto' %}">
+            Nuevo Producto
+        </a>
+    </div>
+
+    {% if productos %}
+    <div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Título</th>
+                    <th>Tipo</th>
+                    <th>Editorial</th>
+                    <th>Autores</th>
+                    <th>Descripción</th>
+                    <th>Stock Total</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for producto in productos %}
+                <tr>
+                    <td>{{ producto.titulo }}</td>
+                    <td>{{ producto.get_tipo_display }}</td> {# Muestra el nombre legible del tipo #}
+                    <td>{{ producto.editorial.nombre }}</td>
+                    <td>
+                        {% for autor in producto.autores.all %}
+                            {{ autor.nombre_completo }}{% if not forloop.last %}, {% endif %}
+                        {% empty %}
+                            N/A
+                        {% endfor %}
+                    </td>
+                    <td>{{ producto.descripcion|default:"Sin descripción" }}</td>
+                    <td>{{ producto.total_stock|default:0 }}</td>
+                    <td>
+                        <a href="{% url 'editar_producto' producto.pk %}">
+                            Editar
+                        </a>
+                        <form action="{% url 'eliminar_producto' producto.pk %}" method="post" onsubmit="return confirm('¿Estás seguro de que quieres eliminar este producto? Esto no se podrá deshacer si está en alguna bodega.');">
+                            {% csrf_token %}
+                            <button type="submit" {% if producto.total_stock > 0 %}disabled{% endif %}>
+                                Eliminar
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div>
+        No hay productos registrados. <a href="{% url 'crear_producto' %}">Crea uno ahora</a>.
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

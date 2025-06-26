@@ -1,0 +1,53 @@
+<!-- inventario/templates/inventario/editoriales/listado.html -->
+{% extends "base.html" %}
+
+
+{% block title %}Listado de Editoriales{% endblock %}
+
+{% block content %}
+<div>
+    <div>
+        <h2>Editoriales</h2>
+        <a href="{% url 'crear_editorial' %}">
+            Nueva Editorial
+        </a>
+    </div>
+
+    {% if editoriales %}
+    <div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Productos Asociados</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for editorial in editoriales %}
+                <tr>
+                    <td>{{ editorial.nombre }}</td>
+                    <td>{{ editorial.num_productos }}</td>
+                    <td>
+                        <a href="{% url 'editar_editorial' editorial.pk %}">
+                            Editar
+                        </a>
+                        <form action="{% url 'eliminar_editorial' editorial.pk %}" method="post" onsubmit="return confirm('¿Estás seguro de que quieres eliminar esta editorial? Esto no se podrá deshacer si no hay productos asociados.');">
+                            {% csrf_token %}
+                            <button type="submit" {% if editorial.num_productos > 0 %}disabled{% endif %}>
+                                Eliminar
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div>
+        No hay editoriales registradas. <a href="{% url 'crear_editorial' %}">Crea una ahora</a>.
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

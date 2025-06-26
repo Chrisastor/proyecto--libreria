@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <h1 class="text-4xl font-bold text-center text-indigo-700 mb-10">Bienvenido a "El Gran Poeta"</h1>
+
+    <div class="bg-white shadow-lg rounded-lg p-8 mb-10 border-t-4 border-indigo-500">
+        {% if user.is_authenticated %}
+            <h2 class="text-3xl font-semibold text-gray-800 mb-4">Hola, {{ user.username }}!</h2>
+            <p class="text-lg text-gray-600 mb-6">Estás logueado. Puedes ir a tu <a href="{% url 'dashboard_redirect' %}" class="text-indigo-600 hover:underline font-medium">Panel de Control</a>.</p>
+            <p class="text-md text-gray-600">O explorar las funcionalidades del sistema:</p>
+            <ul class="list-disc list-inside mt-4 space-y-2">
+                <li><a href="{% url 'listado_productos' %}" class="text-blue-600 hover:underline">Gestionar Productos</a></li>
+                <li><a href="{% url 'listado_movimientos' %}" class="text-blue-600 hover:underline">Ver Movimientos de Stock</a></li>
+                <li><a href="{% url 'listado_stock' %}" class="text-blue-600 hover:underline">Ajustar Stock</a></li>
+            </ul>
+        {% else %}
+            <h2 class="text-3xl font-semibold text-gray-800 mb-4">Gestión de Inventario para Sucursales</h2>
+            <p class="text-lg text-gray-600 mb-6">Por favor, <a href="{% url 'login' %}" class="text-indigo-600 hover:underline font-medium">inicia sesión</a> para acceder a todas las funcionalidades del sistema.</p>
+            <p class="text-md text-gray-600">Aquí puedes ver un resumen de la actividad reciente en nuestras bodegas.</p>
+        {% endif %}
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        {# Últimos Movimientos #}
+        <div class="bg-white shadow-lg rounded-lg p-6 border-t-4 border-green-500">
+            <h3 class="text-2xl font-semibold text-gray-700 mb-4">Últimos Movimientos de Bodega</h3>
+            {% if ultimos_movimientos %}
+                <ul class="space-y-4">
+                    {% for movimiento in ultimos_movimientos %}
+                        <li class="p-4 bg-gray-50 rounded-md shadow-sm">
+                            <p class="text-sm text-gray-500">{{ movimiento.fecha|date:"d M Y H:i" }} por {{ movimiento.usuario.username }}</p>
+                            <p class="text-base font-medium text-gray-800">
+                                {% if movimiento.bodega_origen and movimiento.bodega_destino %}
+                                    <span class="text-red-600">De {{ movimiento.bodega_origen.nombre }}</span> a <span class="text-green-600">{{ movimiento.bodega_destino.nombre }}</span>
+                                {% elif movimiento.bodega_origen %}
+                                    <span class="text-red-600">Salida desde {{ movimiento.bodega_origen.nombre }}</span>
+                                {% elif movimiento.bodega_destino %}
+                                    <span class="text-green-600">Entrada a {{ movimiento.bodega_destino.nombre }}</span>
+                                {% endif %}
+                            </p>
+                            <a href="{% url 'detalle_movimiento' movimiento.pk %}" class="text-blue-500 hover:underline text-sm mt-2 block">Ver Detalles</a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p class="text-gray-600">No hay movimientos recientes para mostrar.</p>
+            {% endif %}
+        </div>
+
+        {# Productos Recién Ingresados #}
+        <div class="bg-white shadow-lg rounded-lg p-6 border-t-4 border-blue-500">
+            <h3 class="text-2xl font-semibold text-gray-700 mb-4">Productos Recién Ingresados</h3>
+            {% if ultimos_productos %}
+                <ul class="space-y-4">
+                    {% for producto in ultimos_productos %}
+                        <li class="p-4 bg-gray-50 rounded-md shadow-sm">
+                            <p class="text-base font-medium text-gray-800">{{ producto.titulo }} ({{ producto.get_tipo_display }})</p>
+                            <p class="text-sm text-gray-600">Editorial: {{ producto.editorial.nombre|default:"N/A" }}</p>
+                            <p class="text-sm text-gray-600">Autores: 
+                                {% for autor in producto.autores.all %}
+                                    {{ autor.nombre }} {{ autor.apellido }}{% if not forloop.last %}, {% endif %}
+                                {% empty %}
+                                    N/A
+                                {% endfor %}
+                            </p>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p class="text-gray-600">No hay productos recientemente ingresados.</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="mt-10 text-center">
+        <a href="{% url 'home' %}" class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-300">
+            Recargar Página de Inicio
+        </a>
+    </div>
+</div>
+{% endblock %}

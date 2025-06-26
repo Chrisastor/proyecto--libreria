@@ -1,0 +1,52 @@
+<!-- inventario/templates/inventario/autores/listado.html -->
+{% extends "base.html" %}
+
+{% block title %}Listado de Autores{% endblock %}
+
+{% block content %}
+<div>
+    <div>
+        <h2>Autores</h2>
+        <a href="{% url 'crear_autor' %}">
+            Nuevo Autor
+        </a>
+    </div>
+
+    {% if autores %}
+    <div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Nombre Completo</th>
+                    <th>Productos Asociados</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for autor in autores %}
+                <tr>
+                    <td>{{ autor.nombre_completo }}</td>
+                    <td>{{ autor.num_productos }}</td> {# num_productos viene de la anotación en la vista #}
+                    <td>
+                        <a href="{% url 'editar_autor' autor.pk %}">
+                            Editar
+                        </a>
+                        <form action="{% url 'eliminar_autor' autor.pk %}" method="post" onsubmit="return confirm('¿Estás seguro de que quieres eliminar a este autor? Esto no se podrá deshacer si tiene productos asociados.');">
+                            {% csrf_token %}
+                            <button type="submit" {% if autor.num_productos > 0 %}disabled{% endif %}>
+                                Eliminar
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div>
+        No hay autores registrados. <a href="{% url 'crear_autor' %}">Crea uno ahora</a>.
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

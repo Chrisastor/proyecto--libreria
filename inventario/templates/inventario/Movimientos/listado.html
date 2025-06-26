@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block title %}Listado de Movimientos{% endblock %}
+
+{% block content %}
+<div>
+    <div>
+        <h2>Movimientos de Inventario</h2>
+        <a href="{% url 'crear_movimiento' %}">
+            Nuevo Movimiento
+        </a>
+    </div>
+
+    {% if movimientos %}
+    <div>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID Movimiento</th>
+                    <th>Fecha</th>
+                    <th>Usuario</th>
+                    <th>Bodega Origen</th>
+                    <th>Bodega Destino</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for movimiento in movimientos %}
+                <tr>
+                    <td>{{ movimiento.id }}</td>
+                    <td>{{ movimiento.fecha }}</td>
+                    <td>{{ movimiento.usuario.username }}</td>
+                    <td>{{ movimiento.bodega_origen.nombre }}</td>
+                    <td>{{ movimiento.bodega_destino.nombre }}</td>
+                    <td>
+                        <a href="{% url 'detalle_movimiento' movimiento.pk %}">
+                            Ver Detalles
+                        </a>
+                        <a href="{% url 'generar_pdf_movimiento' movimiento.pk %}">
+                            Generar PDF
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div>
+        No hay movimientos registrados. <a href="{% url 'crear_movimiento' %}">Crea uno ahora</a>.
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

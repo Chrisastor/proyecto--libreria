@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+
+{% block title %}Crear Movimiento de Inventario{% endblock %}
+
+{% block content %}
+<div>
+    <div>
+        <h2>Crear Nuevo Movimiento de Inventario</h2>
+        <form method="post">
+            {% csrf_token %}
+            
+            <h3>Detalles del Movimiento Principal</h3>
+            <div>
+                {{ form.bodega_origen.label_tag }}
+                {# Aquí se añaden los atributos HTMX directamente al select renderizado por Django #}
+                <select name="{{ form.bodega_origen.name }}" 
+                        id="{{ form.bodega_origen.id_for_label }}"
+                        hx-get="{% url 'get_productos_bodega_htmx' %}" {# ¡CAMBIO AQUÍ! #}
+                        hx-target="#id_detalles-0-producto" {# APUNTA DIRECTAMENTE AL SELECT DEL PRIMER PRODUCTO #}
+                        hx-swap="innerHTML"
+                        hx-trigger="change" {# Este es el cambio clave: activa la solicitud al cambiar la selección #}
+                        hx-vals="js:{bodega_id: event.target.value}" {# Envía el valor seleccionado como 'bodega_id' #}>
+                    {# Iteramos sobre las opciones generadas por Django para el campo ModelChoiceField #}
+                    {% for value, label in form.bodega_origen.field.choices %}
+                        <option value="{{ value }}" {% if value|stringformat:"s" == form.bodega_origen.value|stringformat:"s" %}selected{% endif %}>{{ label }}</option>
+                    {% endfor %}
+                </select>
+                {% if form.bodega_origen.errors %}
+                    <ul class="errorlist">
+                        {% for error in form.bodega_origen.errors %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+            <div>
+                {{ form.bodega_destino.label_tag }}
+                {{ form.bodega_destino }}
+                {% if form.bodega_destino.errors %}
+                    <ul class="errorlist">
+                        {% for error in form.bodega_destino.errors %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+
+            {% if form.non_field_errors %}
+                <ul class="errorlist">
+                    {% for error in form.non_field_errors %}
+                        <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+
+            <h3>Productos a Mover</h3>
+            {{ formset.management_form }}
+            
+            {# Iteramos sobre los formularios del formset #}
+            {% for formset_form in formset %}
+                <div class="inline-formset-item">
+                    {{ formset_form.id }}
+                    {{ formset_form.producto.label_tag }}
+                    {{ formset_form.producto }} 
+                    {{ formset_form.cantidad.label_tag }}
+                    {{ formset_form.cantidad }}
+                    {% if formset_form.DELETE %}
+                        {{ formset_form.DELETE.label_tag }}
+                        {{ formset_form.DELETE }}
+                    {% endif %}
+                    {% if formset_form.errors %}
+                        <ul class="errorlist">
+                            {% for field_name, field_errors in formset_form.errors.items %}
+                                {% for error in field_errors %}
+                                    <li>{{ field_name }}: {{ error }}</li>
+                                {% endfor %}
+                            {% endfor %}
+                            {% if formset_form.non_field_errors %}
+                                {% for error in formset_form.non_field_errors %}
+                                    <li>{{ error }}</li>
+                                {% endfor %}
+                            {% endif %}
+                        </ul>
+                    {% endif %}
+                </div>
+            {% endfor %}
+            
+            <div>
+                <button type="submit">Generar Movimiento</button>
+                <a href="{% url 'listado_movimientos' %}">Cancelar</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

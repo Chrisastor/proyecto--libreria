@@ -1,0 +1,122 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard Jefe de Bodega{% endblock %}
+
+{% block content %}
+<header class="bg-white shadow-md p-4 mb-6">
+    <div class="container mx-auto flex justify-between items-center">
+        <h1 class="text-2xl font-bold text-gray-800">Panel de Control Jefe de Bodega</h1>
+        <nav class="flex items-center space-x-4">
+            <span class="text-gray-600">Bienvenido, {{ user.get_full_name|default:user.username }}</span>
+            <a href="{% url 'logout' %}" class="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition duration-300">Cerrar Sesión</a>
+        </nav>
+    </div>
+</header>
+
+<main class="flex-grow container mx-auto p-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+    <!-- Sección de Gestión de Productos -->
+    <section class="bg-white p-6 rounded-lg shadow-md border-t-4 border-green-600">
+        <h2 class="text-xl font-semibold mb-4 text-gray-700">Gestión de Productos</h2>
+        <ul class="space-y-3">
+            <li>
+                <a href="{% url 'crear_producto' %}" class="flex items-center space-x-3 p-3 bg-green-50 hover:bg-green-100 rounded-md transition duration-200">
+                    <span class="text-green-700">&#9679;</span>
+                    <span class="font-medium text-gray-700">Registrar Nuevo Producto</span>
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'listado_productos' %}" class="flex items-center space-x-3 p-3 bg-green-50 hover:bg-green-100 rounded-md transition duration-200">
+                    <span class="text-green-700">&#9679;</span>
+                    <span class="font-medium text-gray-700">Ver Listado de Productos</span>
+                </a>
+            </li>
+        </ul>
+    </section>
+
+    <!-- Sección de Gestión de Inventario y Stock -->
+    <section class="bg-white p-6 rounded-lg shadow-md border-t-4 border-blue-600">
+        <h2 class="text-xl font-semibold mb-4 text-gray-700">Gestión de Inventario</h2>
+        <ul class="space-y-3">
+            <li>
+                <a href="{% url 'listado_stock' %}" class="flex items-center space-x-3 p-3 bg-blue-50 hover:bg-blue-100 rounded-md transition duration-200">
+                    <span class="text-blue-700">&#9679;</span>
+                    <span class="font-medium text-gray-700">Ver Stock Actual</span>
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'crear_movimiento' %}" class="flex items-center space-x-3 p-3 bg-blue-50 hover:bg-blue-100 rounded-md transition duration-200">
+                    <span class="text-blue-700">&#9679;</span>
+                    <span class="font-medium text-gray-700">Registrar Movimiento de Stock</span>
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'listado_movimientos' %}" class="flex items-center space-x-3 p-3 bg-blue-50 hover:bg-blue-100 rounded-md transition duration-200">
+                    <span class="text-blue-700">&#9679;</span>
+                    <span class="font-medium text-gray-700">Historial de Movimientos</span>
+                </a>
+            </li>
+        </ul>
+    </section>
+
+    <!-- Sección de Gestión de Bodegas -->
+    <section class="bg-white p-6 rounded-lg shadow-md border-t-4 border-purple-600">
+        <h2 class="text-xl font-semibold mb-4 text-gray-700">Gestión de Bodegas</h2>
+        <ul class="space-y-3">
+            <li>
+                <a href="{% url 'crear_bodega' %}" class="flex items-center space-x-3 p-3 bg-purple-50 hover:bg-purple-100 rounded-md transition duration-200">
+                    <span class="text-purple-700">&#9679;</span>
+                    <span class="font-medium text-gray-700">Registrar Nueva Bodega</span>
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'listado_bodegas' %}" class="flex items-center space-x-3 p-3 bg-purple-50 hover:bg-purple-100 rounded-md transition duration-200">
+                    <span class="text-purple-700">&#9679;</span>
+                    <span class="font-medium text-gray-700">Ver Listado de Bodegas</span>
+                </a>
+            </li>
+        </ul>
+    </section>
+
+    <!-- Sección de Informes y Estadísticas -->
+    <section class="bg-white p-6 rounded-lg shadow-md border-t-4 border-orange-600">
+        <h2 class="text-xl font-semibold mb-4 text-gray-700">Informes y Análisis</h2>
+        <ul class="space-y-3">
+            <li>
+                <a href="{% url 'informe_stock' %}" class="flex items-center space-x-3 p-3 bg-orange-50 hover:bg-orange-100 rounded-md transition duration-200">
+                    <span class="text-orange-700">&#9679;</span>
+                    <span class="font-medium text-gray-700">Informe de Stock por Bodega</span>
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'informe_movimientos' %}" class="flex items-center space-x-3 p-3 bg-orange-50 hover:bg-orange-100 rounded-md transition duration-200">
+                    <span class="text-orange-700">&#9679;</span>
+                    <span class="font-medium text-gray-700">Informe de Movimientos</span>
+                </a>
+            </li>
+            <!-- Puedes añadir más enlaces a otros informes relevantes -->
+        </ul>
+    </section>
+
+    <!-- Sección de Gestión de Usuarios (si aplica para este rol) -->
+    <section class="bg-white p-6 rounded-lg shadow-md border-t-4 border-red-600">
+        <h2 class="text-xl font-semibold mb-4 text-gray-700">Gestión de Usuarios</h2>
+        <ul class="space-y-3">
+            <li>
+                <a href="{% url 'listado_usuarios' %}" class="flex items-center space-x-3 p-3 bg-red-50 hover:bg-red-100 rounded-md transition duration-200">
+                    <span class="text-red-700">&#9679;</span>
+                    <span class="font-medium text-gray-700">Ver Usuarios Registrados</span>
+                </a>
+            </li>
+            <!-- Solo si el Jefe de Bodega tiene permisos para crear/editar usuarios, añade: -->
+            <li>
+                <a href="{% url 'crear_usuario' %}" class="flex items-center space-x-3 p-3 bg-red-50 hover:bg-red-100 rounded-md transition duration-200">
+                    <span class="text-red-700">&#9679;</span>
+                    <span class="font-medium text-gray-700">Crear Nuevo Usuario</span>
+                </a>
+            </li>
+        </ul>
+    </section>
+
+</main>
+{% endblock %}
